@@ -1,0 +1,117 @@
+/* 设计 token：纸感暖灰 + 柿子橙强调色。亮/暗两套，组件只引用变量。 */
+:root {
+  color-scheme: light;
+
+  /* 颜色 */
+  --bg: #f4f1ea;
+  --surface: #fcfbf8;
+  --surface-2: #efebe2;
+  --surface-3: #e7e1d4;
+  --canvas: #faf8f3;
+  --line: #e2dccf;
+  --line-strong: #cbc3b1;
+  --ink: #1e1b16;
+  --ink-2: #57513f;
+  --ink-3: #857e6b;
+  --ink-inverse: #fffdf8;
+
+  --accent: #d6451b;
+  --accent-hover: #bd3a14;
+  --accent-active: #a53210;
+  --accent-soft: #fbe6dc;
+  --accent-line: #f0b9a3;
+
+  --ok: #1d7468;
+  --ok-soft: #d9eee9;
+  --info: #3b5ea8;
+  --info-soft: #e0e8f7;
+  --warn: #a8690d;
+  --warn-soft: #f7e9cc;
+  --danger: #b0261d;
+  --danger-soft: #f8dcd8;
+
+  --overlay: rgb(30 27 22 / 0.42);
+
+  /* 字体 */
+  --font-sans: "Segoe UI Variable Text", "Inter", "HarmonyOS Sans SC", "PingFang SC", "Microsoft YaHei UI", "Noto Sans SC", system-ui, sans-serif;
+  --font-mono: "Cascadia Mono", "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --fs-2xs: 11px;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 20px;
+  --fs-2xl: 28px;
+  --fs-3xl: clamp(30px, 4.4vw, 44px);
+  --lh-tight: 1.2;
+  --lh-body: 1.55;
+
+  /* 间距（4px 基准） */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* 圆角 */
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-pill: 999px;
+
+  /* 阴影（暖色） */
+  --sh-sm: 0 1px 2px rgb(60 44 20 / 0.08), 0 0 0 1px rgb(60 44 20 / 0.03);
+  --sh-md: 0 6px 18px -6px rgb(60 44 20 / 0.18), 0 2px 4px rgb(60 44 20 / 0.06);
+  --sh-lg: 0 24px 48px -16px rgb(60 44 20 / 0.28), 0 6px 14px rgb(60 44 20 / 0.08);
+  --focus: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent);
+
+  /* 动效 */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --t-fast: 120ms;
+  --t-mid: 220ms;
+
+  /* 布局 */
+  --topbar-h: 52px;
+  --agent-w: 380px;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #13110d;
+  --surface: #1c1914;
+  --surface-2: #26221b;
+  --surface-3: #312c23;
+  --canvas: #17140f;
+  --line: #342f25;
+  --line-strong: #4a4335;
+  --ink: #f2eee4;
+  --ink-2: #bdb5a2;
+  --ink-3: #8b8370;
+  --ink-inverse: #1c1914;
+
+  --accent: #ff7447;
+  --accent-hover: #ff8a63;
+  --accent-active: #ff9d7c;
+  --accent-soft: #3b2216;
+  --accent-line: #6d3a24;
+
+  --ok: #4cc2ae;
+  --ok-soft: #153029;
+  --info: #8eaaf0;
+  --info-soft: #1d2640;
+  --warn: #e3a94a;
+  --warn-soft: #36290f;
+  --danger: #ff8a7d;
+  --danger-soft: #3d1a16;
+
+  --overlay: rgb(0 0 0 / 0.6);
+  --sh-sm: 0 1px 2px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(255 255 255 / 0.03);
+  --sh-md: 0 8px 22px -6px rgb(0 0 0 / 0.55), 0 2px 4px rgb(0 0 0 / 0.3);
+  --sh-lg: 0 28px 56px -16px rgb(0 0 0 / 0.7), 0 6px 14px rgb(0 0 0 / 0.35);
+}

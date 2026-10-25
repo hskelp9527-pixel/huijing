@@ -1,0 +1,32 @@
+/*
+ * 套图文字的中文字体。
+ * Excalidraw 的 Nunito / Lilita One 没有汉字，且它只对手写体（Excalifont）配 CJK 回退，其它字体的汉字会落到浏览器默认字体（Windows 上常是宋体）。
+ * 这里给同名字体补一个「只管汉字和全角标点」的 @font-face，指向系统黑体：正文用常规体，标题（Lilita One）用粗体。
+ * 浏览器按 unicode-range 逐字选择，拉丁字母仍然用 Excalidraw 自带的字形；画布显示和 PNG 导出走同一套字体，所以两边一致。
+ * 排版数值见 packages/shared/src/text-styles.ts。
+ */
+@font-face {
+  font-family: "Nunito";
+  src:
+    local("Microsoft YaHei UI"),
+    local("Microsoft YaHei"),
+    local("PingFang SC"),
+    local("Noto Sans CJK SC"),
+    local("Noto Sans SC"),
+    local("Source Han Sans SC"),
+    local("WenQuanYi Micro Hei");
+  unicode-range: U+2E80-9FFF, U+F900-FAFF, U+FE30-FE4F, U+FF00-FFEF, U+3000-303F;
+}
+@font-face {
+  font-family: "Lilita One";
+  src:
+    local("Microsoft YaHei UI Bold"),
+    local("Microsoft YaHei Bold"),
+    local("PingFang SC Semibold"),
+    local("PingFangSC-Semibold"),
+    local("Noto Sans CJK SC Bold"),
+    local("Noto Sans SC Bold"),
+    local("Source Han Sans SC Bold"),
+    local("WenQuanYi Micro Hei");
+  unicode-range: U+2E80-9FFF, U+F900-FAFF, U+FE30-FE4F, U+FF00-FFEF, U+3000-303F;
+}

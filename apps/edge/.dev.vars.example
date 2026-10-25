@@ -1,0 +1,28 @@
+# 本地私有配置模板，替换占位值；不要提交 .dev.vars。
+VERTEX_API_KEY=replace-with-vertex-api-key
+SESSION_SECRET=replace-with-random-session-secret-at-least-32-characters
+APP_ENV=development
+PROVIDER_MODE=fixture
+# 每 IP 每 UTC 日套数；整套重出也占1套，单张重出每套累计最多3次。
+GUEST_DAILY_SETS=2
+GLOBAL_DAILY_IMAGES=150
+GUEST_DAILY_RUNS=30
+QUOTA_CLIENT_OPS_DAILY=100
+IMAGE_MODEL_ID=gemini-3.1-flash-image
+IMAGE_MODEL_PRO_ID=gemini-3-pro-image
+IMAGE_MODEL_ALLOWLIST=gemini-3.1-flash-image,gemini-3-pro-image,gemini-3.1-flash-lite-image
+AGENT_MODEL_ID=gemini-3.8-flash
+VISION_MODEL_ID=gemini-3.1-flash-lite
+REFERENCE_MODEL_ID=gemini-3.1-flash-lite
+CONCEPT_MODEL_ID=gemini-3.1-flash-lite
+QUALITY_MODEL_ID=gemini-3.1-flash-lite
+IMAGE_FALLBACK_CHAIN=gemini-3.1-flash-image,gemini-3.1-flash-lite-image
+AGENT_FALLBACK_CHAIN=gemini-3.8-flash,gemini-3.1-flash-lite
+AGENT_MODEL_CAPABILITIES={}
+VERTEX_IMAGE_CONCURRENCY=2
+PROVIDER_RETRY_MAX_WAIT_MS=180000
+VERTEX_TEXT_CONCURRENCY=4
+PROVIDER_RETRY_MS=1000
+PROVIDER_TIMEOUT_MS=180000
+# 可选：仅开发，替换为 loopback HTTP 转发 origin；生产必须删除此项。
+# VERTEX_BASE_URL=http://127.0.0.1:replace-port

@@ -1,0 +1,34 @@
+{
+  "name": "@loomic/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@excalidraw/excalidraw": "^0.18.0",
+    "@loomic/shared": "workspace:*",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.0.1",
+    "next": "^15.0.0",
+    "next-themes": "^0.4.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3"
+  },
+  "scripts": {
+    "predev": "node scripts/prepare-assets.mjs",
+    "dev": "next dev -p 3000",
+    "dev:http": "node scripts/dev-proxy.mjs",
+    "prebuild": "node scripts/prepare-assets.mjs",
+    "build": "next build",
+    "build:fixture": "node scripts/with-env.mjs NEXT_PUBLIC_API_MODE=fixture -- next build",
+    "pretypecheck": "node scripts/prepare-assets.mjs --shared-only",
+    "typecheck": "next typegen && tsc -p tsconfig.json --noEmit",
+    "pretest": "node scripts/prepare-assets.mjs --shared-only",
+    "test": "vitest run"
+  }
+}

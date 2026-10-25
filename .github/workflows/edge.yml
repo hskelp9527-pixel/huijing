@@ -1,0 +1,20 @@
+name: Cloudflare backend
+on:
+  push:
+    paths: ['apps/edge/**', 'packages/shared/**', 'pnpm-lock.yaml', '.github/workflows/edge.yml']
+  pull_request:
+    paths: ['apps/edge/**', 'packages/shared/**', 'pnpm-lock.yaml', '.github/workflows/edge.yml']
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @loomic/shared build
+      - run: pnpm --filter @loomic/edge typecheck
+      - run: pnpm --filter @loomic/edge test
+      - run: pnpm --filter @loomic/edge build

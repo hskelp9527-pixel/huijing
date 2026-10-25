@@ -1,0 +1,1 @@
+ALTER TABLE runs ADD COLUMN direct_mode INTEGER NOT NULL DEFAULT 0 CHECK(direct_mode IN (0,1));

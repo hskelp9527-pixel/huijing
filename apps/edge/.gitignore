@@ -1,0 +1,9 @@
+.dev.vars
+.dev.vars.*
+.wrangler/
+.local/
+.deploy/
+dist/
+coverage/
+
+!.dev.vars.example

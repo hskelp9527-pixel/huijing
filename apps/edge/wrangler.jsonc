@@ -1,0 +1,229 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "huijing-edge-dev",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-01",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "directory": "../web/out",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api",
+      "/api/*"
+    ],
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "single-page-application"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "huijing-dev",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "huijing-assets-dev"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "PROJECT_ROOM",
+        "class_name": "ProjectRoom"
+      },
+      {
+        "name": "PROVIDER_GATE",
+        "class_name": "ProviderGate"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "ProjectRoom",
+        "ProviderGate"
+      ]
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "MEDIA_QUEUE",
+        "queue": "huijing-media-dev"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "huijing-media-dev",
+        "max_batch_size": 1,
+        "max_concurrency": 4,
+        "max_retries": 3
+      }
+    ]
+  },
+  "triggers": {
+    "crons": [
+      "*/1 * * * *",
+      "17 3 * * *"
+    ]
+  },
+  "vars": {
+    "PROVIDER_MODE": "fixture",
+    "APP_ENV": "development",
+    "IMAGE_MODEL_ID": "gemini-3.1-flash-image",
+    "IMAGE_MODEL_PRO_ID": "gemini-3-pro-image",
+    "IMAGE_FALLBACK_CHAIN": "gemini-3.1-flash-image,gemini-3.1-flash-lite-image",
+    "AGENT_FALLBACK_CHAIN": "gemini-3.8-flash,gemini-3.1-flash-lite",
+    "QUOTA_CLIENT_OPS_DAILY": "100",
+    "AGENT_MODEL_ID": "gemini-3.8-flash",
+    "VISION_MODEL_ID": "gemini-3.1-flash-lite",
+    "VERTEX_IMAGE_CONCURRENCY": "1",
+    "PROVIDER_RETRY_MAX_WAIT_MS": "600000",
+    "VERTEX_TEXT_CONCURRENCY": "4",
+    "GUEST_DAILY_SETS": "2",
+    "GLOBAL_DAILY_IMAGES": "150",
+    "GUEST_DAILY_RUNS": "30"
+  },
+  "workers_dev": true,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    }
+  },
+  "env": {
+    "dev": {
+      "name": "huijing-edge-dev",
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "huijing-dev",
+          "database_id": "00000000-0000-0000-0000-000000000000",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "BUCKET",
+          "bucket_name": "huijing-assets-dev"
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "PROJECT_ROOM",
+            "class_name": "ProjectRoom"
+          },
+          {
+            "name": "PROVIDER_GATE",
+            "class_name": "ProviderGate"
+          }
+        ]
+      },
+      "queues": {
+        "producers": [
+          {
+            "binding": "MEDIA_QUEUE",
+            "queue": "huijing-media-dev"
+          }
+        ],
+        "consumers": [
+          {
+            "queue": "huijing-media-dev",
+            "max_batch_size": 1,
+            "max_concurrency": 4,
+            "max_retries": 3
+          }
+        ]
+      },
+      "vars": {
+        "PROVIDER_MODE": "fixture",
+        "APP_ENV": "development",
+        "IMAGE_MODEL_ID": "gemini-3.1-flash-image",
+        "IMAGE_MODEL_PRO_ID": "gemini-3-pro-image",
+        "IMAGE_FALLBACK_CHAIN": "gemini-3.1-flash-image,gemini-3.1-flash-lite-image",
+        "AGENT_FALLBACK_CHAIN": "gemini-3.8-flash,gemini-3.1-flash-lite",
+        "QUOTA_CLIENT_OPS_DAILY": "100",
+        "AGENT_MODEL_ID": "gemini-3.8-flash",
+        "VISION_MODEL_ID": "gemini-3.1-flash-lite",
+        "VERTEX_IMAGE_CONCURRENCY": "1",
+        "PROVIDER_RETRY_MAX_WAIT_MS": "600000",
+        "VERTEX_TEXT_CONCURRENCY": "4",
+        "GUEST_DAILY_SETS": "2",
+        "GLOBAL_DAILY_IMAGES": "150",
+        "GUEST_DAILY_RUNS": "30"
+      }
+    },
+    "production": {
+      "name": "huijing",
+      "routes": [{ "pattern": "huijing.airainyu.xyz", "custom_domain": true }],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "huijing",
+          "database_id": "00000000-0000-0000-0000-000000000000",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "BUCKET",
+          "bucket_name": "huijing-assets"
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "PROJECT_ROOM",
+            "class_name": "ProjectRoom"
+          },
+          {
+            "name": "PROVIDER_GATE",
+            "class_name": "ProviderGate"
+          }
+        ]
+      },
+      "queues": {
+        "producers": [
+          {
+            "binding": "MEDIA_QUEUE",
+            "queue": "huijing-media"
+          }
+        ],
+        "consumers": [
+          {
+            "queue": "huijing-media",
+            "max_batch_size": 1,
+            "max_concurrency": 4,
+            "max_retries": 3
+          }
+        ]
+      },
+      "vars": {
+        "PROVIDER_MODE": "vertex",
+        "APP_ENV": "production",
+        "IMAGE_MODEL_ID": "gemini-3.1-flash-image",
+        "IMAGE_MODEL_PRO_ID": "gemini-3-pro-image",
+        "IMAGE_FALLBACK_CHAIN": "gemini-3.1-flash-image,gemini-3.1-flash-lite-image",
+        "AGENT_FALLBACK_CHAIN": "gemini-3.8-flash,gemini-3.1-flash-lite",
+        "QUOTA_CLIENT_OPS_DAILY": "100",
+        "AGENT_MODEL_ID": "gemini-3.8-flash",
+        "VISION_MODEL_ID": "gemini-3.1-flash-lite",
+        "VERTEX_IMAGE_CONCURRENCY": "1",
+        "PROVIDER_RETRY_MAX_WAIT_MS": "600000",
+        "VERTEX_TEXT_CONCURRENCY": "4",
+        "GUEST_DAILY_SETS": "2",
+        "GLOBAL_DAILY_IMAGES": "150",
+        "GUEST_DAILY_RUNS": "30"
+      }
+    }
+  }
+}

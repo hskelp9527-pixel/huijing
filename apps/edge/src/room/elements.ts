@@ -1,0 +1,40 @@
+import type { CanvasElement } from "@loomic/shared/edge";
+export function imageElement(
+  key: string,
+  asset: { id: string; width: number; height: number },
+  customData: Record<string, unknown>,
+): CanvasElement {
+  const scale = 360 / Math.max(asset.width, asset.height);
+  return {
+    id: `element_${key}`,
+    type: "image",
+    x: 0,
+    y: 0,
+    width: asset.width * scale,
+    height: asset.height * scale,
+    version: 1,
+    fileId: asset.id,
+    angle: 0,
+    scale: [1, 1],
+    strokeColor: "transparent",
+    backgroundColor: "transparent",
+    fillStyle: "solid",
+    strokeWidth: 1,
+    strokeStyle: "solid",
+    roughness: 0,
+    opacity: 100,
+    groupIds: [],
+    frameId: null,
+    roundness: null,
+    seed: 1,
+    versionNonce: 1,
+    isDeleted: false,
+    boundElements: null,
+    updated: Date.now(),
+    link: null,
+    locked: false,
+    status: "saved",
+    crop: null,
+    customData: { ...customData, naturalWidth: asset.width, naturalHeight: asset.height },
+  };
+}

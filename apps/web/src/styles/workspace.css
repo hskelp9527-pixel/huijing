@@ -1,0 +1,555 @@
+.ws {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg);
+}
+.ws-top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: var(--topbar-h);
+  padding: 0 var(--sp-3);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.ws-brand {
+  display: grid;
+  place-items: center;
+}
+.ws-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  max-width: min(36vw, 360px);
+  height: 34px;
+  padding: 0 var(--sp-3);
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  background: transparent;
+  font-size: var(--fs-lg);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.ws-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ws-title svg {
+  color: var(--ink-3);
+  flex: none;
+  opacity: 0;
+  transition: opacity var(--t-fast);
+}
+.ws-title:hover {
+  background: var(--surface-2);
+}
+.ws-title:hover svg,
+.ws-title:focus-visible svg {
+  opacity: 1;
+}
+.ws-title-input {
+  width: min(36vw, 320px);
+  height: 34px;
+  font-weight: 650;
+}
+.save-status {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.save-status > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.save-ok {
+  color: var(--ok);
+}
+.save-error {
+  color: var(--danger);
+}
+.ws-top-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.ws-main {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+}
+.ws-main.is-narrow {
+  grid-template-columns: minmax(0, 1fr);
+}
+.ws-pane {
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+}
+.ws-pane.is-hidden {
+  display: none;
+}
+.ws-canvas {
+  background: var(--canvas);
+}
+.ws-agent {
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+}
+.ws-main.is-narrow .ws-agent {
+  border-left: 0;
+}
+.ws-sep {
+  position: relative;
+  cursor: col-resize;
+  background: var(--bg);
+  touch-action: none;
+  display: grid;
+  place-items: center;
+}
+.ws-sep::after {
+  content: "";
+  width: 3px;
+  height: 36px;
+  border-radius: 2px;
+  background: var(--line-strong);
+  transition: background var(--t-fast), height var(--t-fast);
+}
+.ws-sep:hover::after,
+.ws-sep:focus-visible::after {
+  background: var(--accent);
+  height: 64px;
+}
+.ws-sep:focus-visible {
+  outline: none;
+}
+
+.ws-tabs {
+  flex: none;
+  display: flex;
+  gap: var(--sp-1);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.ws-tabs button {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  height: 36px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--ink-2);
+  font-weight: 600;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.ws-tabs button:hover {
+  background: var(--surface-2);
+}
+.ws-tabs button[aria-selected="true"] {
+  background: var(--ink);
+  color: var(--ink-inverse);
+}
+
+/* 画布 */
+.canvas-wrap {
+  position: absolute;
+  inset: 0;
+}
+.canvas-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  color: var(--ink-2);
+}
+.float-toolbar {
+  position: absolute;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-1);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-lg);
+  transform: translate(-50%, -100%);
+  animation: pop-in var(--t-mid) var(--ease);
+  white-space: nowrap;
+}
+.float-toolbar.is-flipped {
+  transform: translate(-50%, 0);
+}
+
+/* 暗色下不对画布整体反色：生成图必须显示真实颜色（背景色由 appState 控制） */
+.excalidraw.theme--dark canvas {
+  filter: none !important;
+}
+
+/* ───── 隐藏 Excalidraw 原生界面（工具条、菜单、属性面板、提示条、缩放/撤销）─────
+   画布交互与快捷键仍由 Excalidraw 提供；界面由 canvas-chrome.tsx 的自有工具条替代。
+   用 display:none 而不是移除：隐藏的撤销/重做按钮仍在 DOM 里，自有按钮通过它们触发并读取 disabled 状态。 */
+.canvas-wrap .excalidraw .layer-ui__wrapper {
+  display: none !important;
+}
+.canvas-wrap .excalidraw .welcome-screen-center,
+.canvas-wrap .excalidraw .HintViewer {
+  display: none !important;
+}
+
+/* 底部自有工具条 */
+.dock {
+  position: absolute;
+  left: 50%;
+  bottom: var(--sp-4);
+  transform: translateX(-50%);
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  max-width: calc(100% - 24px);
+  padding: 6px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-md);
+  overflow-x: auto;
+}
+.dock-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.dock-sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 var(--sp-1);
+  background: var(--line);
+  flex: none;
+}
+.dock-btn,
+.dock-zoom {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--ink-2);
+  transition: background var(--t-fast), color var(--t-fast), transform var(--t-fast);
+}
+.dock-zoom {
+  min-width: 52px;
+  padding: 0 var(--sp-1);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.dock-btn:hover:not(:disabled),
+.dock-zoom:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.dock-btn:active:not(:disabled),
+.dock-zoom:active {
+  background: var(--surface-3);
+  transform: translateY(1px);
+}
+.dock-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.dock-btn[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--ink-inverse);
+}
+.edit-menu {
+  min-width: 190px;
+}
+.edit-menu button {
+  justify-content: space-between;
+}
+.edit-menu button small {
+  color: var(--ink-3);
+  font-size: var(--fs-2xs);
+}
+.edit-menu button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.icon-btn-danger:hover:not(:disabled) {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+/* 原生右键菜单含未汉化条目（如 Wrap selection in frame），所有操作已并入自有工具条，所以隐藏 */
+.canvas-wrap .excalidraw .context-menu {
+  display: none !important;
+}
+
+/* 空画布提示：不拦截鼠标，画布照常可操作 */
+.canvas-empty {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-6);
+  text-align: center;
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+  pointer-events: none;
+}
+.canvas-empty strong {
+  color: var(--ink);
+  font-size: var(--fs-md, 1rem);
+  font-weight: 600;
+}
+
+/* ───────── 右栏：商品与卖点 / Agent 标签 ───────── */
+.side {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+.side-tabs {
+  flex: none;
+  display: flex;
+  gap: 2px;
+  padding: var(--sp-2) var(--sp-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+.side-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 36px;
+  padding: 0 var(--sp-3);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--ink-2);
+  font-weight: 600;
+  font-size: var(--fs-md);
+  margin-bottom: -1px;
+}
+.side-tabs button:hover {
+  color: var(--ink);
+}
+.side-tabs button[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+.side-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+.side-layer {
+  position: absolute;
+  inset: 0;
+}
+.side-layer.is-hidden {
+  display: none;
+}
+
+.set-panel {
+  height: 100%;
+  overflow-y: auto;
+  padding: var(--sp-4);
+  display: grid;
+  align-content: start;
+  gap: var(--sp-5);
+}
+.set-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.set-actions.is-compact {
+  margin-top: var(--sp-3);
+}
+.set-status {
+  display: grid;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--bg);
+}
+.set-status-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  font-size: var(--fs-md);
+}
+.set-status-row span {
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.set-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+.set-bar i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width var(--t-mid) var(--ease);
+}
+.set-section {
+  display: grid;
+  gap: var(--sp-3);
+}
+.set-section h3 {
+  font-size: var(--fs-md);
+  font-weight: 650;
+}
+.set-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 24px;
+}
+.set-field {
+  display: grid;
+  gap: 4px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-3);
+}
+.point {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  gap: var(--sp-2);
+  align-items: start;
+}
+.point-no {
+  margin-top: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+  color: var(--ink-2);
+  font-size: var(--fs-xs);
+  display: grid;
+  place-items: center;
+  font-weight: 650;
+}
+.point-fields {
+  display: grid;
+  gap: 6px;
+}
+.point-fields textarea {
+  resize: vertical;
+  min-height: 52px;
+  height: auto;
+  line-height: 1.45;
+  padding-top: 8px;
+}
+.set-note {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.set-note.is-warn {
+  color: var(--danger);
+}
+.set-saving {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.shots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-2);
+}
+.shot {
+  display: grid;
+  gap: 6px;
+  padding: var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+.shot.is-failed {
+  border-color: color-mix(in srgb, var(--danger) 45%, var(--line));
+}
+.shot-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+.shot-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.shot-state.st-completed {
+  color: var(--ok);
+}
+.shot-state.st-failed {
+  color: var(--danger);
+}
+.shot-state.st-submitted,
+.shot-state.st-running,
+.shot-state.st-ingesting {
+  color: var(--accent);
+}
+.shot-err {
+  font-size: var(--fs-xs);
+  color: var(--danger);
+}
+.shot-ops {
+  display: flex;
+  gap: var(--sp-2);
+  justify-content: flex-end;
+}
+
+/* 手机宽度：顶栏放不下额度胶囊时收起（首页仍显示） */
+@media (max-width: 520px) {
+  .ws-top .quota-pill {
+    max-width: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+  }
+}
