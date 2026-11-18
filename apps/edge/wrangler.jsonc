@@ -210,6 +210,7 @@
       "vars": {
         "PROVIDER_MODE": "vertex",
         "APP_ENV": "production",
+        "GENERATION_PAUSED": "1",
         "IMAGE_MODEL_ID": "gemini-3.1-flash-image",
         "IMAGE_MODEL_PRO_ID": "gemini-3-pro-image",
         "IMAGE_FALLBACK_CHAIN": "gemini-3.1-flash-image,gemini-3.1-flash-lite-image",

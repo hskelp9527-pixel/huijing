@@ -8,6 +8,10 @@ import { useEffect, useState } from "react";
 import { API_MODE } from "../../lib/api";
 import { useSession } from "../../lib/session";
 
+/** 2026-11-18 起线上改为演示模式：API 消耗过大，生成功能已取消（后端 index.ts 的 GENERATION_ROUTES 一并拦截）。 */
+const DEMO_REASON =
+  "当前为演示模式：页面内容均为模拟数据，不具备真实生成能力。原因：API 消耗过大，生成功能已取消。";
+
 /** 演示模式标记。首页/登录页悬浮在顶部居中；工作区放进顶栏（inline），避免和项目名挤在一起。 */
 export function DemoBadge({ inline = false }: { inline?: boolean }) {
   const pathname = usePathname();
@@ -18,10 +22,10 @@ export function DemoBadge({ inline = false }: { inline?: boolean }) {
     <div
       className={inline ? "demo-badge demo-badge-inline" : "demo-badge"}
       role="note"
-      title="当前使用浏览器内的演示数据，未连接真实后端"
+      title={DEMO_REASON}
     >
       <FlaskConical size={13} aria-hidden />{" "}
-      <span>演示数据{inline ? "" : " · 未连接真实后端"}</span>
+      <span>演示数据{inline ? "" : " · API 消耗过大，生成功能已取消"}</span>
     </div>
   );
 }

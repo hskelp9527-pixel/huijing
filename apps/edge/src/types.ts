@@ -6,6 +6,8 @@ export interface Env {
   MEDIA_QUEUE: Queue<{ taskId: string; projectId: string }>;
   ASSETS?: Fetcher;
   PROVIDER_MODE: "fixture" | "vertex";
+  /** 设了就拦截所有调用模型的接口（生产环境，2026-11-18 起：API 消耗过大） */
+  GENERATION_PAUSED?: string;
   APP_ENV: "development" | "test" | "production";
   VERTEX_API_KEY?: string;
   VERTEX_BASE_URL?: string;

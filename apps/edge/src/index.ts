@@ -69,6 +69,26 @@ app.use("/api/*", async (c, next) => {
   c.header("Cache-Control", "no-store");
   c.header("X-Content-Type-Options", "nosniff");
 });
+// 2026-11-18 起生产环境停用一切会调用模型的接口：API 消耗过大，已取消（开关 GENERATION_PAUSED 只在 wrangler.jsonc 的 production vars 里设置）。
+// 已有项目、套图预览、画布浏览与本地编辑不受影响。前端同时改为演示模式构建（NEXT_PUBLIC_API_MODE=fixture）。
+const GENERATION_ROUTES = [
+  /^POST \/api\/sets$/,
+  /^PATCH \/api\/sets\/[^/]+\/(analysis|selling-points)$/,
+  /^POST \/api\/sets\/[^/]+\/regenerate$/,
+  /^POST \/api\/sets\/[^/]+\/shots\/[^/]+\/regenerate$/,
+  /^POST \/api\/projects\/start$/,
+  /^POST \/api\/threads\/[^/]+\/messages$/,
+  /^POST \/api\/runs\/[^/]+\/retry$/,
+  /^POST \/api\/input-requests\/[^/]+\/answers$/,
+  /^POST \/api\/tasks\/[^/]+\/retry$/,
+  /^POST \/api\/media\/ops$/,
+];
+app.use("/api/*", async (c, next) => {
+  const route = `${c.req.method} ${new URL(c.req.url).pathname}`;
+  if (c.env.GENERATION_PAUSED && GENERATION_ROUTES.some((r) => r.test(route)))
+    throw new ApiError("PROVIDER_ERROR", "生成功能已停用：API 消耗过大，已取消。已有项目和预览仍可查看。", 503);
+  await next();
+});
 app.get("/api/me", async (c) =>
   c.json({ user: c.get("user"), quota: await quota(c.env, c.get("user").id, c.get("quotaIp")) }),
 );
